@@ -1,0 +1,355 @@
+<html style="overflow: hidden; width: 110%; margin: -10px; padding: 0; ">
+<script>
+var h = 0;
+var cH = 0;
+var w = 0;
+var cW = 0;
+var f = 0.006;
+var escape = false;
+var inverted = true;
+
+window.addEventListener("load", paint);
+window.addEventListener("load", scroll);
+window.addEventListener("resize", paint, {once: true});
+window.addEventListener("wheel", scroll, {once: true});
+window.addEventListener("keydown", tune, {once: true});
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function escapeLoop(e) {
+
+	if (e.keyCode == 27) {escape = true;}
+
+}
+
+async function tune(e) {
+
+	escape = false;
+
+	const sleep = (milliseconds) => {
+	  return new Promise(resolve => setTimeout(resolve, milliseconds))
+	}
+	
+	var key = (event.keyCode == 32) ? "Space" : event.key;
+	console.log(key);
+	const validKeys = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Enter", "Delete", "c", "i", "Space"];
+
+	if (validKeys.includes(key) == false) {
+		window.addEventListener("keydown", tune, {once: true});
+		return false;
+	}
+
+	var maze = document.getElementById("maze");
+	var n = 0;
+	var maxN = maze.childElementCount;
+	var x = 0;
+	var color1 = 0;
+	var color2 = 0;
+	var color3 = 0;
+
+		switch (key) {
+			case "c":
+
+				while (true == true) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					await sleep(100);
+					
+					maze.style.backgroundColor = "rgba("+
+						Math.floor(Math.random() * 255) +","+
+						Math.floor(Math.random() * 255) +","+
+						Math.floor(Math.random() * 255) +")";
+					maze.style.color = "rgba("+
+						Math.floor(Math.random() * 255) +","+
+						Math.floor(Math.random() * 255) +","+
+						Math.floor(Math.random() * 255) +")";
+
+					x++;
+
+				}
+
+
+				break;
+
+			case "i":
+
+				while (n < 255) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					await sleep(1);
+
+					if (inverted == true) {
+						color1 = (255 - 255 * (n / 255) );
+						color2 = (255 * (n / 255) );
+					} else {
+						color2 = (255 - 255 * (n / 255) );
+						color1 = (255 * (n / 255) );
+					}
+					
+					maze.style.backgroundColor = "rgba("+
+						color1 +","+
+						color1 +","+
+						color1 +")";
+					maze.style.color = "rgba("+
+						color2 +","+
+						color2 +","+
+						color2 +","+
+						color2 +")";
+					n++;
+					x++;
+
+				}
+
+				if (inverted == true) {inverted = false;} else {inverted = true;}
+
+				break;
+
+			case "Space":
+
+				while (n < maxN) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					if (maze.childNodes[n].innerText == String.fromCharCode("0x2572")) {
+						maze.childNodes[n].innerText = String.fromCharCode("0x2571");
+					} else {
+						maze.childNodes[n].innerText = String.fromCharCode("0x2572");
+					}
+
+					n++;
+					x++;
+
+				}
+
+				break;
+
+			case "Enter":
+
+				while (n < maxN) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					var i = Math.floor(Math.random() * Math.floor(maxN));
+					if (maze.childNodes[i].style.visiblity != "visible") {
+						await sleep(1);
+						maze.childNodes[i].style.visibility  = "visible";
+					} else {
+						n--;
+					}
+	
+					n++;
+					x++;
+
+				}
+	
+				break;
+			case "Delete":
+
+				while (n < maxN) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					var i = Math.floor(Math.random() * Math.floor(maxN));
+					if (maze.childNodes[i].style.visiblity != "hidden") {
+						await sleep(1);
+						maze.childNodes[i].style.visibility  = "hidden";
+					} else {
+						n--;
+					}
+
+					n++;
+					x++;
+
+				}	
+
+				break;
+			case "ArrowDown":
+
+				while (n < maxN) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					var i = Math.floor(Math.random() * Math.floor(maxN));
+					maze.childNodes[i].innerText = String.fromCharCode("0x2572");
+
+					n++;
+					x++;
+
+				}
+
+				break;
+			case "ArrowUp":
+
+				while (n < maxN) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					await sleep(1);
+					var i = Math.floor(Math.random() * Math.floor(maxN));
+					maze.childNodes[i].innerText = String.fromCharCode("0x2571");
+
+					n++;
+					x++;
+
+				}
+
+				break;
+			case "ArrowRight":
+
+				while (n < maxN) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+
+					maze.childNodes[n].innerText = String.fromCharCode("0x2572");
+
+					n++;
+					x++;
+
+				}	
+
+				break;
+
+			case "ArrowLeft":
+
+				while (n < maxN) {
+
+					if (x > 10000) {break;}
+
+					window.addEventListener("keydown", escapeLoop, {once: true});
+
+					if (escape) {break;}
+					
+					maze.childNodes[n].innerText = String.fromCharCode("0x2571");
+
+					n++;
+					x++;
+
+				}
+
+				break;
+
+		}
+
+
+	window.addEventListener("keydown", tune, {once: true});
+
+}
+
+function scroll(e) {
+
+	var maze = document.getElementById("maze");
+	var i = Math.floor(Math.random() * Math.floor(2));
+	var wall = document.createElement("span");
+
+	wall.innerHTML  = String.fromCharCode("0x" + (2571 + i));
+	maze.prepend(wall);
+	maze.removeChild(maze.childNodes[maze.childElementCount - 1]);
+
+	window.addEventListener("wheel", scroll, {once: true});
+
+	if (e.shiftKey) {
+
+		reColor(maze);
+
+	}
+
+}
+
+function paint(e) {
+
+	var maze = document.getElementById("maze");
+	var maxN = Math.floor(f * window.innerHeight * window.innerWidth);
+	var n = maze.textContent.length;
+
+
+	if (window.innerHeight * window.innerWidth > h * w) {
+		
+		while (n < maxN) {
+			var i = Math.floor(Math.random() * Math.floor(2));
+			var wall = document.createElement("span");
+			wall.innerHTML  = String.fromCharCode("0x" + (2571 + i));
+			maze.prepend(wall);
+			n++;
+		}
+				
+	} else {
+	
+		while (n > maxN) {
+
+			maze.removeChild(maze.childNodes[0]);
+			n--;
+
+		}
+
+	}
+
+	h = window.innerHeight;
+	w = window.innerWidth;
+	
+	window.addEventListener("resize", paint, {once: true});
+
+}
+
+function reColor(maze) {
+
+	var n = 0;
+	var maxN = maze.childElementCount;
+
+	while (n < maxN) {
+
+		maze.childNodes[n].style.color = "rgb("+
+			Math.floor(Math.random() * 255)+", "+
+			Math.floor(Math.random() * 255)+", "+
+			Math.floor(Math.random() * 255)+")";
+
+		n++;
+
+	}
+
+}
+
+</script>
+<style>
+	span:hover {
+
+		color: #f00;
+	}
+</style>
+<div id="maze" style="overflow-wrap: break-word; line-height: 14px; letter-spacing: -2px;"></div>
+</html>
