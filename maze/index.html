@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="settings.js"></script> 
+        <script src="mazeLogic.js"></script> 
+        <script src="navigation.js"></script>
+        <script src="stopWatch.js"></script> 
+    </head>
+<script>
+
+window.addEventListener("load", init);
+
+function init() {
+    
+    rowPosition = 1;
+    colPosition = 1;
+    stopWatchActive = false;
+    initMaze();
+
+}
+
+</script>
+
+<div id="main_container">
+    <div id="controller_container">
+        <div><div id="stopwatch">00:00:00:000</div></div>
+        <hr />
+        <div>Width <input type="text" id="mazeWidth" value=5></div>
+        <div>Height <input type="text" id="mazeHeight" value=5></div>
+        <div><input type="checkbox" id="simpleMode"> simple mode for beginners</div>
+        <div><input type="checkbox" id="noDetours"> no detours</div>
+        <div><input type="checkbox" id="explorerMode"> explorer mode (walls have to be explored)</div>
+        <div><input type="checkbox" id="blackTrace"> back trace (makes going back more difficult)</div>
+        <div>
+            R - Create new maze<br/>
+            Cursor keys - navigate
+        </div>
+    </div>
+    <div id="maze_container" style="overflow-wrap: break-word; line-height: 14px; letter-spacing: -2px;">
+        <table id="maze"></table>
+        <div id="notice"></div>
+    </div>
+
+</div>
+</html>
