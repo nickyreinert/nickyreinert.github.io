@@ -94,9 +94,76 @@ function paint() {
 
 }
 
+function getNextExits(rowIndex, colIndex, createDetour) {
+
+    var nextExits = [];
+
+    for (i = 0; i < validExits.length; i++) {
+
+        switch(validExits[i]) {
+
+            case "right":
+                // if this is a detour call (no route to exit), ignore right movement
+                // // when this would lead to the exit
+                if (createDetour == true && colIndex + 1 == mazeWidth && rowIndex == mazeHeight) {
+
+                    nextPossibleCell == null;
+
+                } else {
+
+                    nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex + 1));
+
+                }
+                
+                break;
+
+            case "left":
+                nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex - 1));
+                break;
+
+            case "bottom":
+                // if this is a detour call (no route to exit), ignore bottom movement
+                // when this would lead to the exit
+                if (createDetour == true && colIndex == mazeWidth && rowIndex + 1 == mazeHeight) {
+
+                    nextPossibleCell == null;
+
+                } else {
+
+                    nextPossibleCell = document.getElementById("cell_" + (rowIndex + 1) + "_" + colIndex);
+
+                }
+                break;
+
+            case "top":
+                nextPossibleCell = document.getElementById("cell_" + (rowIndex - 1) + "_" + colIndex);
+                break;
+
+        }
+        
+        if (nextPossibleCell != null) {
+
+            if (nextPossibleCell.getAttribute("occupied") != "true") {
+                
+                for (t = 0; t < remainingExits[validExits[i]]; t++) {
+
+                    nextExits.push(validExits[i]);
+
+                }
+
+            }
+
+        } 
+
+    }
+
+    
+    return nextExits;
+}
+
 function addRoute(startAtRow, startAtCol, createDetour) {
 
-    var remainingExits = {"right": mazeWidth, "bottom": mazeHeight, "left": 0, "top": 0};
+    remainingExits = {"right": mazeWidth, "bottom": mazeHeight, "left": 0, "top": 0};
     var nextExits = [];
     var lastCells= [];
 
@@ -123,55 +190,21 @@ function addRoute(startAtRow, startAtCol, createDetour) {
 
         if (loopFuse >= maxLoops) {break;}
 
-        nextExits = [];
-
-        for (i = 0; i < validExits.length; i++) {
-
-            switch(validExits[i]) {
-
-                case "right":
-                    nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex + 1));
-                    break;
-
-                case "left":
-                    nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex - 1));
-                    break;
-
-                case "bottom":
-                    nextPossibleCell = document.getElementById("cell_" + (rowIndex + 1) + "_" + colIndex);
-                    break;
-
-                case "top":
-                    nextPossibleCell = document.getElementById("cell_" + (rowIndex - 1) + "_" + colIndex);
-                    break;
-
-            }
-            
-            if (nextPossibleCell != null) {
-
-                if (nextPossibleCell.getAttribute("occupied") != "true") {
-                    
-                    for (t = 0; t < remainingExits[validExits[i]]; t++) {
-
-                        nextExits.push(validExits[i]);
-
-                    }
-
-                }
-
-            } 
-
-        }
+        nextExits = getNextExits(rowIndex, colIndex, createDetour);
 
         if (nextExits.length == 0) {
 
             if (createDetour == true) {
 
                 if (colIndex == mazeWidth) {
+                    
                     rowIndex++;
                     colIndex = 1;
+
                 } else {
+
                     colIndex++;
+
                 }
 
                 currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
@@ -190,26 +223,19 @@ function addRoute(startAtRow, startAtCol, createDetour) {
             
             }
 
-        } 
-
-        exitIndex = Math.floor(Math.random() * Math.floor(nextExits.length));
-
-        exit = nextExits[exitIndex];
-
-        if (createDetour == false) {
-
-            currentCell.style["border-"+exit] = "none";
-
-        } else {
-
-            if (!(exit == "right" && colIndex == mazeWidth - 1 && rowIndex == mazeHeight) &&
-                !(exit == "bottom" && colIndex == mazeWidth && rowIndex == mazeHeight - 1) ) {
-
-                currentCell.style["border-"+exit] = "none";
-
-            }
         }
         
+        if (currentCell == null) {continue;}
+
+        // get random exit
+        exitIndex = Math.floor(Math.random() * Math.floor(nextExits.length));
+        exit = nextExits[exitIndex];
+
+        // remove border according to current exit
+        currentCell.style["border-"+exit] = "none";
+        
+        // based on random exit, move coordinates to next cell
+        // but dont actually select next cell!
         switch(exit) {
 
             case "right":
@@ -242,10 +268,13 @@ function addRoute(startAtRow, startAtCol, createDetour) {
                 
         }
 
+        // first add new coordinates to route
         lastCells.push([rowIndex, colIndex]);
 
+        // now jump to next cell
         currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
 
+        // and set opposite borders based on exit from the last cell
         switch(exit) {
 
             case "right":
@@ -314,6 +343,10 @@ function createBlankMaze() {
                 col.style.backgroundColor = backgroundColorExit;
             }
             col.setAttribute("id", "cell_" + rowIndex + "_" + colIndex);
+            // col.style["border-right"] = "2px #000000 solid";
+            // col.style["border-bottom"] = "2px #000000 solid";
+            // col.style["border-left"] = "none";
+            // col.style["border-top"] = "none";
 
             if (explorerMode == true) {
                 col.classList.add("invisibleWall");

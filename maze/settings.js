@@ -3,7 +3,7 @@ var mazeHeight;
 var backgroundColorPosition = "rgb(240, 0, 0)";
 var backgroundColorTrace;
 var backgroundColorClear = "rgb(255, 255, 255)";
-var backgroundColorRoute = "rgb(255, 255, 255)";
+var backgroundColorRoute = "rgb(0, 255, 255)";
 var backgroundColorExit = "rgb(0, 200, 0)";
 
 var validExits;
@@ -24,5 +24,7 @@ var stopWatchActive;
 var savedTime;
 
 var interval;
+
+var remainingExits = [];
 
 wallColor = "rgb(0,0,0)";
