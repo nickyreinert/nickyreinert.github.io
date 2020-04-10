@@ -25,5 +25,4 @@ var savedTime;
 
 var interval;
 
-backgroundColorTrace = "rgb(200, 200, 200)";
 wallColor = "rgb(0,0,0)";

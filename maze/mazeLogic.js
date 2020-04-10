@@ -10,7 +10,7 @@ function initMaze() {
 
     document.getElementById("maze").style.visibility = "hidden";
 
-    document.getElementById("notice").innerHTML = "Done. Press enter to start.";
+    document.getElementById("notice").innerHTML = "Maze is ready. <br />Press <i>Enter</i> to start.<br />Press <i>Esc</i> to show settings and help.</div>";
 
     if (stopWatchActive == true) {
         stopWatchActive = false;
@@ -23,6 +23,7 @@ function initMaze() {
 
     }
 
+    setTableSize();
 }
 
 function paint() {
@@ -39,6 +40,10 @@ function paint() {
 
         backgroundColorTrace = "rgb(0,0,0)";
 
+    } else {
+
+        backgroundColorTrace = "rgb(200, 200, 200)";
+        
     }
 
     if (simpleMode == true) {
@@ -286,8 +291,6 @@ function createBlankMaze() {
 
     var rowIndex, colIndex;
 
-    
-
     var table = document.getElementById("maze");
     table.innerHTML = "";
     var tbody = document.createElement("tbody");
@@ -311,6 +314,7 @@ function createBlankMaze() {
                 col.style.backgroundColor = backgroundColorExit;
             }
             col.setAttribute("id", "cell_" + rowIndex + "_" + colIndex);
+
             if (explorerMode == true) {
                 col.classList.add("invisibleWall");
             }
@@ -323,5 +327,40 @@ function createBlankMaze() {
     }
     
     table.appendChild(tbody);
+
+}
+
+function setTableSize() {
+
+    var table = document.getElementById("maze");
+
+    if (mazeWidth == mazeHeight) {
+
+        var cellWidth = window.innerWidth / mazeWidth;
+        var cellHeight = (window.innerHeight - 40) / mazeHeight;
+        
+        if (cellWidth < cellHeight) {
+
+            var tableDimension = cellWidth * mazeWidth - 40;
+    
+        } else {
+            
+            var tableDimension = cellHeight * mazeHeight - 40;
+            
+        }
+
+        table.style.width = tableDimension;
+        table.style.height = tableDimension;
+
+        table.style.marginLeft = Math.round((window.innerWidth - tableDimension) / 2) + "px";
+        table.style.marginRight = table.style.marginLeft;
+
+        
+    } else {
+
+        table.style.width = window.innerWidth - 40 - (mazeWidth * 2);
+        table.style.height = window.innerHeight - 40 - (mazeHeight * 2);
+
+    }
 
 }

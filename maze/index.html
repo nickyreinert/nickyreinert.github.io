@@ -10,6 +10,7 @@
 <script>
 
 window.addEventListener("load", init);
+window.addEventListener("resize", setTableSize);
 
 function init() {
     
@@ -23,24 +24,26 @@ function init() {
 </script>
 
 <div id="main_container">
+    <div id="stopwatch_container">
+        <div id="stopwatch">00:00:00:000</div>
+    </div>
     <div id="controller_container">
-        <div><div id="stopwatch">00:00:00:000</div></div>
-        <hr />
-        <div>Width <input type="text" id="mazeWidth" value=5></div>
-        <div>Height <input type="text" id="mazeHeight" value=5></div>
-        <div><input type="checkbox" id="simpleMode"> simple mode for beginners</div>
-        <div><input type="checkbox" id="noDetours"> no detours</div>
-        <div><input type="checkbox" id="explorerMode"> explorer mode (walls have to be explored)</div>
-        <div><input type="checkbox" id="blackTrace"> back trace (makes going back more difficult)</div>
-        <div>
-            R - Create new maze<br/>
-            Cursor keys - navigate
+            <div id="controller">
+            <div>Width <input type="text" id="mazeWidth" value=10></div>
+            <div>Height <input type="text" id="mazeHeight" value=10></div>
+            <div><input type="checkbox" id="simpleMode"> simple mode for beginners</div>
+            <div><input type="checkbox" id="noDetours"> no detours</div>
+            <div><input type="checkbox" id="explorerMode"> explorer mode (walls have to be explored)</div>
+            <div><input type="checkbox" id="blackTrace"> black trace (makes going back more difficult)</div>
+            <div>
+                R - Create new maze<br/>
+                Cursor keys - navigate
+            </div>
         </div>
     </div>
     <div id="maze_container" style="overflow-wrap: break-word; line-height: 14px; letter-spacing: -2px;">
         <table id="maze"></table>
         <div id="notice"></div>
-    </div>
 
 </div>
 </html>

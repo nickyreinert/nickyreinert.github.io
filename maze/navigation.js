@@ -1,6 +1,20 @@
 document.onkeydown = function(event) {
     
     switch (event.keyCode) {
+        // esc key to display settings overlay
+        case 27:
+
+            if (document.getElementById("controller_container").style.display == "") {
+
+                document.getElementById("controller_container").style.display = "block";
+
+            } else {
+
+                document.getElementById("controller_container").style.display = "";
+            }
+                
+            break;
+
         // enter key revelas maze and starts stop watch
         case 13:
 
