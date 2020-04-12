@@ -1,101 +1,24 @@
-html, body  {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    bottom: 0;
-    margin: 0;
-    padding: 0;
-    position: absolute ;
-    font-family: monospace;
-    background-color: #000000;
-
-}
-
-div#main_container {
-    
-    margin: 0;
-    padding: 0;
-    
-}
-
-div#stopwatch_container {
-
-    text-align: center;
-    display: block;
-    width: 100%;
-    height: 5%;
-    line-height: 30px;
-    background-color: #ffffff;
-
-}
-
-div#stopwatch_container:hover ~ div#controller_container {
-
-    display: block;
-
-}
-
-div#controller_container {
-
-    background-color: #000000;
-    color: #ffffff;
-    position: absolute;
-    width: 100%;
-    height: 95%;
-    display: none;
-    z-index: 9999;
-    
-}
-
-    div#controller, div#controller div {
-
-        width: 75%;
-        margin: 0 auto;
-        margin-top: 1em;
-    }
-
 div#maze_container {
 
-    width: 100%;
-    height: 90%;
-    background-color: #000000;
-    position: relative; 
+    width: 500px;
+    height: 500px;
+    margin: 10% auto;
+    position: relative;
+    border: 2px #000000 solid;
 
 }
 
-table#maze {
+table {
 
+    width: 100%;
+    height: 100%;
     border-spacing: 0;
-    position: absolute;
-    z-index: 999;
-    background-color: #ffffff;
-    margin: 40px 0;
 
 }
 
-td.visibleWall {
-    border-color: #000000;
-}
-
-td.invisibleWall {
-    border-color: #ffffff;
-}
-
-div#notice {
-    position: absolute;
-    color: #ffffff;
-    z-index: 0;
-    width: 100%;
-    text-align: center;
-    height: 50%;
-    padding-top: 10%;
-    letter-spacing: 0;
-    
-}
 table td {
 
-    border-right: 2px #000000 solid;
-    border-bottom: 2px #000000 solid;
+    border: 1px #000000 solid;
 
 }
 

@@ -196,20 +196,7 @@ function addRoute(startAtRow, startAtCol, createDetour) {
 
             if (createDetour == true) {
 
-                if (colIndex == mazeWidth) {
-                    
-                    rowIndex++;
-                    colIndex = 1;
-
-                } else {
-
-                    colIndex++;
-
-                }
-
-                currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
-
-                continue;
+                return false;
 
             } else {
                 
@@ -274,7 +261,7 @@ function addRoute(startAtRow, startAtCol, createDetour) {
         // now jump to next cell
         currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
 
-        // and set opposite borders based on exit from the last cell
+        // // and set opposite borders based on exit from the last cell
         switch(exit) {
 
             case "right":
@@ -332,25 +319,26 @@ function createBlankMaze() {
         for (colIndex = 1; colIndex <= mazeWidth; colIndex++) {
 
             var col = document.createElement("td");
-            //var colContent = document.createTextNode("");
-            //col.appendChild(colContent);
+            // entry / start point
             if ((rowIndex == 1 && colIndex == 1)) {
                 col.style.backgroundColor = backgroundColorRoute;
                 col.setAttribute("occupied", "true");
 
             }
+
+            // finish / exit point
             if ((rowIndex == mazeHeight && colIndex == mazeWidth)) {
                 col.style.backgroundColor = backgroundColorExit;
             }
+            
             col.setAttribute("id", "cell_" + rowIndex + "_" + colIndex);
-            // col.style["border-right"] = "2px #000000 solid";
-            // col.style["border-bottom"] = "2px #000000 solid";
-            // col.style["border-left"] = "none";
-            // col.style["border-top"] = "none";
-
+            
             if (explorerMode == true) {
+
                 col.classList.add("invisibleWall");
+
             }
+
             row.appendChild(col);
 
         }
