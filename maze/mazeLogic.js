@@ -196,20 +196,7 @@ function addRoute(startAtRow, startAtCol, createDetour) {
 
             if (createDetour == true) {
 
-                if (colIndex == mazeWidth) {
-                    
-                    rowIndex++;
-                    colIndex = 1;
-
-                } else {
-
-                    colIndex++;
-
-                }
-
-                currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
-
-                continue;
+                return false;
 
             } else {
                 
@@ -334,6 +321,9 @@ function createBlankMaze() {
             var col = document.createElement("td");
             //var colContent = document.createTextNode("");
             //col.appendChild(colContent);
+
+            col.style.backgroundColor = "rgb(255,255,255)";
+
             if ((rowIndex == 1 && colIndex == 1)) {
                 col.style.backgroundColor = backgroundColorRoute;
                 col.setAttribute("occupied", "true");
@@ -342,11 +332,8 @@ function createBlankMaze() {
             if ((rowIndex == mazeHeight && colIndex == mazeWidth)) {
                 col.style.backgroundColor = backgroundColorExit;
             }
+
             col.setAttribute("id", "cell_" + rowIndex + "_" + colIndex);
-            // col.style["border-right"] = "2px #000000 solid";
-            // col.style["border-bottom"] = "2px #000000 solid";
-            // col.style["border-left"] = "none";
-            // col.style["border-top"] = "none";
 
             if (explorerMode == true) {
                 col.classList.add("invisibleWall");
