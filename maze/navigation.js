@@ -88,6 +88,7 @@ document.onkeydown = function(event) {
 
                 stopWatchActive = false;
                 stopStopWatch();
+                showResults();
 
             }
 
@@ -153,6 +154,20 @@ function paintTrace(direction) {
         revealNeighbourWalls(rowPosition, colPosition);
 
     }
+}
+
+function hideResults() {
+
+    document.getElementById("results_container").style.visibility = "hidden";
+
+}
+function showResults() {
+
+    console.log("show results");
+    document.getElementById("results_container").style.visibility = "visible";
+    var time = document.getElementById("stopwatch").innerHTML;
+    document.getElementById("twitterShareUrl").setAttribute("href", twitterShareUrl + "I did it. My time: " + time + " Try yourself: " + window.location);
+    document.getElementById("timeResults").innerHTML = time;
 }
 
 function revealNeighbourWalls(rowPosition, colPosition) {

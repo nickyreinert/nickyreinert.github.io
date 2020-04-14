@@ -30,5 +30,7 @@ var interval;
 var remainingExits = [];
 
 var shareUrl;
+var twitterShareUrl = "https://twitter.com/intent/tweet?text=";
+
 
 wallColor = "rgb(0,0,0)";

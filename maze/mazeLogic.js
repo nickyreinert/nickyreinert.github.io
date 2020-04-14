@@ -5,6 +5,7 @@ function initMaze() {
     if (demoMode == false) {
 
         document.getElementById("notice").innerHTML = "Please wait";
+        hideResults();
         
     } else {
 
@@ -475,6 +476,10 @@ function setTableSize() {
 
     var table = document.getElementById("maze");
 
+    var availableWidth = window.innerWidth - 40;
+    var availableHeight = window.innerHeight - 40;
+
+    // if maze width and height are the same (quadratic)
     if (mazeWidth == mazeHeight) {
 
         var cellWidth = window.innerWidth / mazeWidth;
