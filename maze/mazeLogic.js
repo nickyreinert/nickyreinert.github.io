@@ -1,40 +1,19 @@
-function initMaze() {
+function initMaze() {   
 
-    document.getElementById("notice").innerHTML = "Please wait";
-    paint();
-    rowPosition = 1;
-    colPosition = 1;
+    demoMode = document.getElementById("demoMode").checked;
 
-    currentCell = document.getElementById("cell_" + rowPosition + "_" + colPosition);
-    currentCell.style.backgroundColor = backgroundColorPosition;
+    if (demoMode == false) {
 
-    document.getElementById("maze").style.visibility = "hidden";
+        document.getElementById("notice").innerHTML = "Please wait";
+        
+    } else {
 
-    document.getElementById("notice").innerHTML = "Maze is ready. <br />Press <i>Enter</i> to start.<br />Press <i>Esc</i> to show settings and help.</div>";
-
-    if (stopWatchActive == true) {
-        stopWatchActive = false;
+        document.getElementById("maze").style.visibility = "visible";
         stopStopWatch();
-    }
-
-    if (explorerMode == true) {
-
-        revealNeighbourWalls(1, 1);
 
     }
-
-    setTableSize();
-}
-
-function paint() {
-
-    mazeHeight = document.getElementById("mazeHeight").value;
-    mazeWidth = document.getElementById("mazeWidth").value;
 
     blackTrace = document.getElementById("blackTrace").checked;
-    noDetours = document.getElementById("noDetours").checked;
-    simpleMode = document.getElementById("simpleMode").checked;
-    explorerMode = document.getElementById("explorerMode").checked;
 
     if (blackTrace == true) {
 
@@ -45,6 +24,148 @@ function paint() {
         backgroundColorTrace = "rgb(200, 200, 200)";
         
     }
+    
+    if(window.location.search.substr(1) != "") {
+
+        importMaze(window.location.search.substr(1));
+
+    } else {
+
+        createMaze();
+
+        exportMaze();
+    
+    }
+
+    rowPosition = 1;
+    colPosition = 1;
+
+    currentCell = document.getElementById("cell_" + rowPosition + "_" + colPosition);
+    currentCell.style.backgroundColor = backgroundColorPosition;
+
+    if (demoMode == false) {
+    
+        document.getElementById("maze").style.visibility = "hidden";
+
+        document.getElementById("notice").innerHTML = "Maze is ready. <br />Press <i>Enter</i> to start.<br />Press <i>Esc</i> to show settings and help.</div>";
+
+        if (stopWatchActive == true) {
+            stopWatchActive = false;
+            stopStopWatch();
+        }
+
+    }
+    
+    if (explorerMode == true) {
+
+        revealNeighbourWalls(1, 1);
+
+    }
+
+    setTableSize();
+}
+
+function importMaze(mazeDataString) {
+
+    var borders = [];
+    var mazeData;
+    var cellIndex = 0;
+    
+    var currentCell;
+
+    mazeData = mazeDataString.split(",");
+  
+    mazeWidth = mazeData[0];
+    mazeHeight = mazeData[1];
+
+    createBlankMaze();
+
+    for (var i = 0; i < mazeData[2].length; i += 2) {
+    
+        borders.push([mazeData[2].charAt(i), mazeData[2].charAt(i + 1)])
+
+    }   
+
+    for (rowIndex = 1; rowIndex <= (mazeHeight); rowIndex++) {
+
+        for (colIndex = 1; colIndex <= (mazeWidth); colIndex++) {
+
+            currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
+            currentCell.setAttribute("occupied", "true");
+            // right border set?
+            if (borders[cellIndex][0] != "x") {
+
+                currentCell.style.borderRight = "none";
+
+                // also set left border of next cell
+                if (colIndex < mazeWidth) {
+                    
+                    document.getElementById("cell_" + rowIndex + "_" + (colIndex + 1)).style.borderLeft = "none";
+
+                }
+
+            };
+
+            // bottom border set?
+            if (borders[cellIndex][1] != "x") {
+
+                currentCell.style.borderBottom = "none";
+                // also set top border of next cell to top
+                if (rowIndex < mazeHeight) {
+                    
+                    document.getElementById("cell_" + (rowIndex + 1) + "_" + colIndex).style.borderTop = "none";
+
+                }
+
+            };
+    
+            cellIndex++;
+
+        }
+    
+    }
+
+}
+
+function exportMaze() {
+
+    var table = document.getElementById("maze");
+    var mazeData = "";
+    var currentCell;
+
+    for (rowIndex = 1; rowIndex <= (mazeHeight); rowIndex++) {
+
+        for (colIndex = 1; colIndex <= (mazeWidth); colIndex++) {
+
+        currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
+        
+            if (currentCell.style.borderRight != "") {
+                mazeData += ("r");
+            } else {
+                mazeData += ("x");
+            }
+            if (currentCell.style.borderBottom != "") {
+                mazeData += ("b");
+            } else {
+                mazeData += ("x");
+            }
+        }
+
+    }
+
+    shareUrl = window.location + "?" + mazeWidth + "," + mazeHeight + "," + mazeData;
+    document.getElementById("shareUrl").setAttribute("href", shareUrl);
+    
+}
+
+function createMaze() {
+
+    mazeHeight = document.getElementById("mazeHeight").value;
+    mazeWidth = document.getElementById("mazeWidth").value;
+
+    noDetours = document.getElementById("noDetours").checked;
+    simpleMode = document.getElementById("simpleMode").checked;
+    explorerMode = document.getElementById("explorerMode").checked;
 
     if (simpleMode == true) {
 
@@ -380,6 +501,75 @@ function setTableSize() {
 
         table.style.width = window.innerWidth - 40 - (mazeWidth * 2);
         table.style.height = window.innerHeight - 40 - (mazeHeight * 2);
+
+    }
+
+}
+
+function changeDimensions(keyCode) {
+
+    var rePaint = false;
+
+    if ([73,74,75,76,79,85].includes(keyCode)) {
+        rePaint = true;
+    }
+    switch (keyCode) {
+
+        // i pressed
+        case 73: 
+            document.getElementById("mazeHeight").value++;
+            mazeHeight = document.getElementById("mazeHeight").value;
+            break;
+        // k pressed
+        case 75: 
+            if (document.getElementById("mazeHeight").value > 1) {
+                document.getElementById("mazeHeight").value--;
+            } else {
+                rePaint = false;
+            }
+            mazeHeight = document.getElementById("mazeHeight").value;
+            break;
+
+        // j pressed
+        case 76: 
+            document.getElementById("mazeWidth").value++;
+            mazeWidth = document.getElementById("mazeWidth").value;
+            break;
+        // l pressed
+        case 74: 
+            if (document.getElementById("mazeWidth").value > 1) {
+                document.getElementById("mazeWidth").value--;
+            } else {
+                rePaint = false;
+            }
+            mazeWidth = document.getElementById("mazeWidth").value;
+            break;
+
+        // u pressed
+        case 79: 
+            document.getElementById("mazeWidth").value++;
+            document.getElementById("mazeHeight").value++;
+            mazeWidth = document.getElementById("mazeWidth").value;
+            mazeHeight = document.getElementById("mazeHeight").value;
+            break;
+        // o pressed
+        case 85: 
+            if (document.getElementById("mazeWidth").value > 1 &&
+             document.getElementById("mazeHeight").value > 1) {
+                document.getElementById("mazeWidth").value--;
+                document.getElementById("mazeHeight").value--;
+            } else {
+                rePaint = false;
+            }
+            mazeWidth = document.getElementById("mazeWidth").value;
+            mazeHeight = document.getElementById("mazeHeight").value;
+            break;
+
+    }
+
+    if (rePaint == true) {
+        
+        initMaze();
 
     }
 

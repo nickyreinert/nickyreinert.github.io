@@ -6,6 +6,7 @@
         <script src="mazeLogic.js"></script> 
         <script src="navigation.js"></script>
         <script src="stopWatch.js"></script> 
+        <script src="initEvents.js"></script> 
     </head>
 <script>
 
@@ -19,18 +20,24 @@ function init() {
     stopWatchActive = false;
     initMaze();
 
+    initEvents();
+
 }
 
 </script>
 
 <div id="main_container">
     <div id="stopwatch_container">
+        <div id="shareUrlContainer"><a id="shareUrl" href="">Share this maze</a></div>
+        <div id="spacer">|</div>
         <div id="stopwatch">00:00:00:000</div>
+
     </div>
     <div id="controller_container">
             <div id="controller">
-            <div>Width <input type="text" id="mazeWidth" value=5></div>
-            <div>Height <input type="text" id="mazeHeight" value=5></div>
+            <div>Width <input type="text" id="mazeWidth" value=5>(j/l keys)</div>
+            <div>Height <input type="text" id="mazeHeight" value=5>(i/k keys)</div>
+            <div><input type="checkbox" id="demoMode"> demo mode (no stop watch)</div>
             <div><input type="checkbox" id="simpleMode"> simple mode for beginners</div>
             <div><input type="checkbox" id="noDetours"> no detours</div>
             <div><input type="checkbox" id="explorerMode"> explorer mode (walls have to be explored)</div>
@@ -38,6 +45,8 @@ function init() {
             <div>
                 R - Create new maze<br/>
                 Cursor keys - navigate
+                u - decrease width and height
+                o - increase width and height
             </div>
         </div>
     </div>

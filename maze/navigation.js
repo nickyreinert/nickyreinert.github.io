@@ -18,13 +18,28 @@ document.onkeydown = function(event) {
         // enter key revelas maze and starts stop watch
         case 13:
 
-            document.getElementById("maze").style.visibility = "visible";
-            stopWatchActive = true;
-            startTime = new Date().getTime();
-            interval = setInterval(startStopWatch, 1); // 1: millisecond
+            if (demoMode == false) {
+
+                document.getElementById("maze").style.visibility = "visible";
+                stopWatchActive = true;
+                startTime = new Date().getTime();
+                interval = setInterval(startStopWatch, 1); // 1: millisecond
+
+            }
 
             break;
 
+        // i k j l keys to change width / height u o for both, width and height
+        case 73:
+        case 74:
+        case 75:
+        case 76:
+        case 79:
+        case 85:
+
+            changeDimensions(event.keyCode);
+
+            break;
         // r key re-creates maze and hides it
         case 82:
 
@@ -59,7 +74,7 @@ document.onkeydown = function(event) {
     }
 
 
-    if (cursorKeyCodes.includes(event.keyCode)) {
+    if (cursorKeyCodes.includes(event.keyCode) && demoMode == false) {
 
         if (stopWatchActive == false && rowPosition != mazeHeight && colPosition != mazeWidth) {
 
