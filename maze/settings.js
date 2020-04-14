@@ -31,6 +31,7 @@ var remainingExits = [];
 
 var shareUrl;
 var twitterShareUrl = "https://twitter.com/intent/tweet?text=";
+var telegramShareUrl = "https://telegram.me/share/url?url=<URL>&text=<TEXT>";
 
 
 wallColor = "rgb(0,0,0)";

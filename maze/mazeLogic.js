@@ -476,10 +476,29 @@ function setTableSize() {
 
     var table = document.getElementById("maze");
 
-    var availableWidth = window.innerWidth - 40;
-    var availableHeight = window.innerHeight - 40;
+    // var availableWidth = window.innerWidth - 40;
+    // var availableHeight = window.innerHeight - 40;
+
+    // var minCellWidth = 25;
+    // var minCellHeight = 25;
+    
+    // // 1.000 pixel / 30 cells - 30 cells + 2 px border -> cell width
+    // var cellWidth = (availableWidth / mazeWidth) - (mazeWidth * 2);
+    // var cellHeight= (availableHeight / mazeHeight) - (mazeHeight * 2);
+
+    // // greater value wins, of course, now we have an even dimension
+    // // to build quadratic cells
+    // var cellDimension = (cellWidth >= cellHeight) ? cellWidth : cellHeight;
+    
+    // // first set table width / height
+    // console.log(mazeWidth);
+    // console.log(mazeHeight);
+    // console.log(cellDimension);
+    // table.style.width = mazeWidth * cellDimension;
+    // table.style.height = mazeHeight * cellDimension;
 
     // if maze width and height are the same (quadratic)
+    // and available width > height, fill up 
     if (mazeWidth == mazeHeight) {
 
         var cellWidth = window.innerWidth / mazeWidth;

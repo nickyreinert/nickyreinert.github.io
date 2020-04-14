@@ -166,8 +166,12 @@ function showResults() {
     console.log("show results");
     document.getElementById("results_container").style.visibility = "visible";
     var time = document.getElementById("stopwatch").innerHTML;
-    document.getElementById("twitterShareUrl").setAttribute("href", twitterShareUrl + "I did it. My time: " + time + " Try yourself: " + window.location);
+    var message = "I mastered a "+mazeWidth+" x "+mazeHeight+" maze in "+time+".";
+    document.getElementById("twitterShareUrl").setAttribute("href", twitterShareUrl + message + " Challenge me on " + window.location +".");
+    document.getElementById("telegramShareUrl").setAttribute("href", telegramShareUrl.replace("<TEXT>", message).replace("<URL>", " Challenge me on " + window.location +"."));
+    
     document.getElementById("timeResults").innerHTML = time;
+
 }
 
 function revealNeighbourWalls(rowPosition, colPosition) {
