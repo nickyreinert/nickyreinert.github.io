@@ -1,42 +1,38 @@
+function getParameters() {
+
+    var getParametersString = window.location.search.substr(1);
+    var getParameters = getParametersString.split("=");
+    
+    return getParameters;
+
+}
+
 function initMaze() {   
 
-    demoMode = document.getElementById("demoMode").checked;
+    if(getParameters()[0] == "hostId") {
 
-    if (demoMode == false) {
+        var multiPlayerId = getParameters()[1];
 
-        document.getElementById("notice").innerHTML = "Please wait";
-        hideResults();
-        
-    } else {
 
-        document.getElementById("maze").style.visibility = "visible";
-        stopStopWatch();
+    } else
+    if(getParameters()[0] == "mazeData") {
 
-    }
-
-    blackTrace = document.getElementById("blackTrace").checked;
-
-    if (blackTrace == true) {
-
-        backgroundColorTrace = "rgb(0,0,0)";
-
-    } else {
-
-        backgroundColorTrace = "rgb(200, 200, 200)";
-        
-    }
+        var encodedMazeData = getParameters()[1];
+        var mazeDataJson = LZString.decompressFromUTF16(decodeURIComponent(encodedMazeData));
     
-    if(window.location.search.substr(1) != "") {
-
-        importMaze(window.location.search.substr(1));
+        importMaze(mazeDataJson);
 
     } else {
+
+        getDemoMode();
 
         createMaze();
 
         exportMaze();
     
     }
+    
+    getBlackTrace();
 
     rowPosition = 1;
     colPosition = 1;
@@ -66,24 +62,40 @@ function initMaze() {
     setTableSize();
 }
 
-function importMaze(mazeDataString) {
+function importMaze(mazeDataJson) {
 
     var borders = [];
-    var mazeData;
     var cellIndex = 0;
     
     var currentCell;
 
-    mazeData = mazeDataString.split(",");
+    var mazeData; 
+
+    mazeData = JSON.parse(mazeDataJson);
+
+    console.log(mazeData);
   
-    mazeWidth = mazeData[0];
-    mazeHeight = mazeData[1];
+    mazeWidth = mazeData.width;
+    mazeHeight = mazeData.height;
+    demoMode = mazeData.demoMode;
+    blackTrace = mazeData.blackTrace;
+    explorerMode = mazeData.explorerMode;
+    noDetours = mazeData.noDetours;
+    simpleMode = mazeData.simpleMode;
+
+    document.getElementById("mazeWidth").value = mazeWidth;
+    document.getElementById("mazeHeight").value = mazeHeight;
+    document.getElementById("demoMode").checked = demoMode;
+    document.getElementById("blackTrace").checked = blackTrace;
+    document.getElementById("explorerMode").checked = explorerMode;
+    document.getElementById("noDetours").checked = noDetours;
+    document.getElementById("simpleMode").checked = simpleMode;
 
     createBlankMaze();
 
-    for (var i = 0; i < mazeData[2].length; i += 2) {
+    for (var i = 0; i < mazeData.borders.length; i += 2) {
     
-        borders.push([mazeData[2].charAt(i), mazeData[2].charAt(i + 1)])
+        borders.push([mazeData.borders.charAt(i), mazeData.borders.charAt(i + 1)])
 
     }   
 
@@ -131,7 +143,7 @@ function importMaze(mazeDataString) {
 function exportMaze() {
 
     var table = document.getElementById("maze");
-    var mazeData = "";
+    var mazeBorders = "";
     var currentCell;
 
     for (rowIndex = 1; rowIndex <= (mazeHeight); rowIndex++) {
@@ -141,21 +153,37 @@ function exportMaze() {
         currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
         
             if (currentCell.style.borderRight != "") {
-                mazeData += ("r");
+                mazeBorders += ("r");
             } else {
-                mazeData += ("x");
+                mazeBorders += ("x");
             }
             if (currentCell.style.borderBottom != "") {
-                mazeData += ("b");
+                mazeBorders += ("b");
             } else {
-                mazeData += ("x");
+                mazeBorders += ("x");
             }
         }
 
     }
 
-    shareUrl = window.location + "?" + mazeWidth + "," + mazeHeight + "," + mazeData;
-    document.getElementById("shareUrl").setAttribute("href", shareUrl);
+    var mazeData = {
+        "width": mazeWidth,
+        "height": mazeHeight,
+        "borders": mazeBorders,
+        "demoMode": demoMode,
+        "simpleMode": simpleMode,
+        "explorerMode": explorerMode,
+        "noDetours": noDetours,
+        "blackTrace": blackTrace
+    };
+
+    var mazeDataJson = JSON.stringify(mazeData);
+
+    localStorage.setItem("compressedMazeData",LZString.compressToUTF16(mazeDataJson));
+
+    shareUrl = window.location + "?mazeData=" + localStorage.getItem("compressedMazeData");
+    document.getElementById("mazeDataJson").value = mazeDataJson;
+    document.getElementById("shareMazeData").setAttribute("href", shareUrl);
     
 }
 

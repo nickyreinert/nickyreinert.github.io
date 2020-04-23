@@ -31,14 +31,8 @@ div#stopwatch_container {
 
 }
 
-div#stopwatch_container:hover ~ div#controller_container,
-div#controller_container:hover {
 
-    display: block;
-
-}
-
-    div#stopwatch, div#shareUrlContainer{
+    div#stopwatch, div#showSettingsContainer{
 
         float: left;
         width: 48%;
@@ -50,10 +44,14 @@ div#controller_container:hover {
     }
 
     div#stopwatch {
+        text-align: right;
+    }
+    div#showSettingsContainer {
         text-align: left;
     }
-    div#shareUrlContainer {
-        text-align: right;
+
+    a#showSettings {
+        text-decoration: none;
     }
 
 div#controller_container {
@@ -63,7 +61,7 @@ div#controller_container {
     position: fixed;
     top: 30px;
     width: 100%;
-    height: 50%;
+    height: auto;
     display: none;
     z-index: 99999;
     
@@ -75,6 +73,14 @@ div#controller_container {
         margin: 0 auto;
         margin-top: 1em;
     }
+
+a#shareMazeData {
+    color: #ffffff;
+    
+}
+a#shareMazeData:hover {
+    color: #ff0000;
+}
 
 div#maze_container {
 

@@ -4,15 +4,7 @@ document.onkeydown = function(event) {
         // esc key to display settings overlay
         case 27:
 
-            if (document.getElementById("controller_container").style.display == "") {
-
-                document.getElementById("controller_container").style.display = "block";
-
-            } else {
-
-                document.getElementById("controller_container").style.display = "";
-            }
-                
+            toggleSettings();
             break;
 
         // enter key revelas maze and starts stop watch
@@ -154,6 +146,19 @@ function paintTrace(direction) {
         revealNeighbourWalls(rowPosition, colPosition);
 
     }
+}
+
+function toggleSettings() {
+    if (document.getElementById("controller_container").style.display == "") {
+
+        document.getElementById("controller_container").style.display = "block";
+
+    } else {
+
+        document.getElementById("controller_container").style.display = "";
+    }
+        
+
 }
 
 function hideResults() {
