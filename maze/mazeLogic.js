@@ -13,6 +13,7 @@ function initMaze() {
 
         var multiPlayerId = getParameters()[1];
 
+        connectToHost(multiPlayerId);
 
     } else
     if(getParameters()[0] == "mazeData") {
