@@ -1,0 +1,78 @@
+<html>
+
+<link rel="stylesheet" type="text/css" href="styles.css">
+<script src="createBlankMaze.js"></script>     
+
+<script>
+
+window.addEventListener("load", paint);
+
+var mazeWidth = 10;
+var mazeHeight = mazeWidth;
+
+function paint() {
+
+    createBlankMaze();
+    
+    var exits = [];
+
+	for (exit = 1; exit <= mazeWidth - 1; exit++) {
+
+		exits.push("right");
+		exits.push("bottom");
+
+	}
+
+    var currentCell = document.getElementById("cell_1_1");
+
+    var rowIndex = 1;
+
+    var colIndex = 1;
+
+    var exit;
+
+    for (exitIndex = 0; exitIndex < exits.length; exitIndex++) {
+
+        exit = exits[exitIndex];
+        
+        currentCell.style["border-"+exit] = "none";
+
+        switch(exit) {
+
+            case "right":
+
+                colIndex = colIndex + 1;
+                break;
+
+            case "bottom":
+
+                rowIndex = rowIndex + 1;
+                break;
+
+        }
+
+        currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
+
+        currentCell.style.backgroundColor = "#f00000";
+
+        switch(exit) {
+
+            case "right":
+
+                currentCell.style["border-left"] = "none";
+                break;
+
+            case "bottom":
+
+            currentCell.style["border-top"] = "none";
+                break;
+
+        }
+        
+    }
+
+}
+
+</script>
+<div id="maze_container" style="overflow-wrap: break-word; line-height: 14px; letter-spacing: -2px;"></div>
+</html>
