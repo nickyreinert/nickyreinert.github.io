@@ -1,6 +1,11 @@
 function hostMultiPlayerSession() {
 
-    var peer = new Peer(); 
+    // need to add stun server otherwise i get this error
+    // >> ICE failed, add a STUN server and see about:webrtc for more details #470 
+    var config = { 'iceServers': [{ 'urls': ['stun:stun.l.google.com:19302'] }] };
+    
+    var peer = new Peer(config);
+
     var multiPlayerLink = document.getElementById('multiPlayerLink');
 
     multiPlayerLink.value = "Please wait...";
@@ -29,8 +34,10 @@ function hostMultiPlayerSession() {
 
 function connectToHost(hostId) {
 
-    var conn = peer.connect('dest-peer-id');
+    var peer = new Peer(); 
+    var conn = peer.connect(hostId);
 
+    console.log(conn);
     conn.on('open', function() {
         // Receive messages
         conn.on('data', function(data) {
