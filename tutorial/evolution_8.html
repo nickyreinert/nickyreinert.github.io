@@ -5,28 +5,68 @@
 
 <script>
 
-window.addEventListener("load", paint);
-
-var mazeWidth = 10;
+var mazeWidth = 100;
 var mazeHeight = mazeWidth;
+
+window.addEventListener("load", init);
+
+function init() {
+
+    createBlankMaze();
+
+    paint();
+
+}
 
 function paint() {
 
-    createBlankMaze();
-    
+	var startAtRow = 1;
+	var startAtCol = 1;
+
+	var currentCell;
+	
+    addRoute(startAtRow, startAtCol, false, "rgb(240, 0, 0)");
+
+    for (n = 1; n < (mazeWidth * mazeHeight) - 1; n++) {
+
+        var currentCell = document.getElementById("cell_" + startAtRow + "_" + startAtCol);
+        
+        if (currentCell.getAttribute("occupied") == "true") {
+
+            addRoute(startAtRow, startAtCol, true, "rgb(240, 120, 0)");
+
+        }
+
+        if (startAtCol == mazeWidth) {
+            
+            startAtRow++;
+            startAtCol = 1;
+
+        } else {
+
+            startAtCol++;
+
+        }
+
+    }
+
+}
+
+function addRoute(startAtRow, startAtCol, createDetour, backgroundColorRoute) {
+
     var validExits = ["right", "bottom", "left", "top"];
 	
     var remainingExits = {"right": mazeWidth, "bottom": mazeHeight, "left": 0, "top": 0};
 	
     var nextExits = [];
-	
-    var lastCells = [];
+    
+	var lastCells= [];
 
-    var currentCell = document.getElementById("cell_1_1");
-
-    var rowIndex = 1;
-
-    var colIndex = 1;
+    var rowIndex = startAtRow;
+    
+	var colIndex = startAtCol;
+    
+    var currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
 
     var exit;
 
@@ -36,149 +76,175 @@ function paint() {
 
     var loop = 0;
 
-    var maxLoops = 1000;
-
     var loopFuse = 0;
+
+    var maxLoops = 3 * mazeWidth * mazeHeight;
 
     var nextPossibleCell;
 
-	while (loop < ((mazeWidth * mazeHeight) - 1)) {
+    while (loop < ((mazeWidth * mazeHeight) - 1)) {
 
-		loopFuse++;
+        loopFuse++;
 
-		if (loopFuse >= maxLoops) {break;}
+        if (loopFuse >= maxLoops) {break;}
 
-		nextExits = [];
+        nextExits = [];
 
-		for (i = 0; i < validExits.length; i++) {
+        for (i = 0; i < validExits.length; i++) {
 
-			switch(validExits[i]) {
+            switch(validExits[i]) {
 
-				case "right":
-					nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex + 1));
-					break;
+                case "right":
+                    nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex + 1));
+                    break;
 
-				case "left":
-					nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex - 1));
-					break;
+                case "left":
+                    nextPossibleCell = document.getElementById("cell_" + rowIndex + "_" + (colIndex - 1));
+                    break;
 
-				case "bottom":
-					nextPossibleCell = document.getElementById("cell_" + (rowIndex + 1) + "_" + colIndex);
-					break;
+                case "bottom":
+                    nextPossibleCell = document.getElementById("cell_" + (rowIndex + 1) + "_" + colIndex);
+                    break;
 
-				case "top":
-					nextPossibleCell = document.getElementById("cell_" + (rowIndex - 1) + "_" + colIndex);
-					break;
+                case "top":
+                    nextPossibleCell = document.getElementById("cell_" + (rowIndex - 1) + "_" + colIndex);
+                    break;
 
-			}
-			
-            if (nextPossibleCell != null && nextPossibleCell.style.backgroundColor != "rgb(240, 0, 0)") {
-                
-                for (t = 0; t < remainingExits[validExits[i]]; t++) {
+            }
+            
+            if (nextPossibleCell != null) {
 
-                    nextExits.push(validExits[i]);
+                if (nextPossibleCell.getAttribute("occupied") != "true") {
+                    
+                    for (t = 0; t < remainingExits[validExits[i]]; t++) {
+
+                        nextExits.push(validExits[i]);
+
+                    }
 
                 }
 
             } 
- 
 
-		}
+        }
 
-		if (nextExits.length == 0) {
+        if (nextExits.length == 0) {
 
-			lastCells.splice(lastCells.length - 1, 1);
+            if (createDetour == true) {
 
-			rowIndex = lastCells[lastCells.length - 1][0];
-			
-			colIndex = lastCells[lastCells.length - 1][1];
-			
-			currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
+                return false;
 
-			continue;
-			
-		}
 
-		exitIndex = Math.floor(Math.random() * nextExits.length);
+            } else {
+                
+                lastCells.splice(lastCells.length - 1, 1);
 
-		exit = nextExits[exitIndex];
+                rowIndex = lastCells[lastCells.length - 1][0];
+                colIndex = lastCells[lastCells.length - 1][1];
+                currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
 
-		currentCell.style["border-"+exit] = "none";
+                continue;
+            
+            }
 
-		switch(exit) {
+        } 
 
-			case "right":
+        exitIndex = Math.floor(Math.random() * Math.floor(nextExits.length));
 
-				colIndex = colIndex + 1;
-				remainingExits.left++;
-				remainingExits.right--;
-				break;
+        exit = nextExits[exitIndex];
 
-			case "bottom":
+        if (createDetour == false) {
 
-				rowIndex = rowIndex + 1;
-				remainingExits.top++;
-				remainingExits.bottom--;
-				break;
+            currentCell.style["border-"+exit] = "none";
 
-			case "left":
+        } else {
 
-				colIndex = colIndex - 1;
-				remainingExits.left--;
-				remainingExits.right++;
-				break;
+            if (!(exit == "right" && colIndex == mazeWidth - 1 && rowIndex == mazeHeight) &&
+                !(exit == "bottom" && colIndex == mazeWidth && rowIndex == mazeHeight - 1) ) {
 
-			case "top":
+                currentCell.style["border-"+exit] = "none";
 
-				rowIndex = rowIndex - 1;
-				remainingExits.top--;
-				remainingExits.bottom++;
-				break;
-				
-		}
+            }
+        }
+        
+        switch(exit) {
 
-		lastCells.push([rowIndex, colIndex]);
+            case "right":
 
-		currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
+                colIndex = colIndex + 1;
+                remainingExits.left++;
+                remainingExits.right--;
+                break;
 
-		switch(exit) {
+            case "bottom":
 
-			case "right":
+                rowIndex = rowIndex + 1;
+                remainingExits.top++;
+                remainingExits.bottom--;
+                break;
 
-				currentCell.style["border-left"] = "none";
-				break;
+            case "left":
 
-			case "bottom":
+                colIndex = colIndex - 1;
+                remainingExits.left--;
+                remainingExits.right++;
+                break;
 
-				currentCell.style["border-top"] = "none";
-				break;
+            case "top":
 
-			case "left":
+                rowIndex = rowIndex - 1;
+                remainingExits.top--;
+                remainingExits.bottom++;
+                break;
+                
+        }
 
-				currentCell.style["border-right"] = "none";
-				break;
+        lastCells.push([rowIndex, colIndex]);
 
-			case "top":
+        currentCell = document.getElementById("cell_" + rowIndex + "_" + colIndex);
 
-				currentCell.style["border-bottom"] = "none";
-				break;
+        switch(exit) {
 
-		}
+            case "right":
 
-		if (rowIndex == mazeHeight && colIndex == mazeWidth) {
+                currentCell.style["border-left"] = "none";
+                break;
 
-			break;
+            case "bottom":
 
-		}
+                currentCell.style["border-top"] = "none";
+                break;
 
-		currentCell.style.backgroundColor = "#f00000";
+            case "left":
 
-		loop++;
+                currentCell.style["border-right"] = "none";
+                break;
 
-	}
+            case "top":
+
+                currentCell.style["border-bottom"] = "none";
+                break;
+
+        }
+
+        if (rowIndex == mazeHeight && colIndex == mazeWidth) {
+
+            break;
+
+        }
+
+        currentCell.style.backgroundColor = backgroundColorRoute;
+        currentCell.setAttribute("occupied", "true");
+
+        lastExit = exit;
+
+        loop++;
+
+    }
 
 }
 
 </script>
+
 <div id="maze_container" style="overflow-wrap: break-word; line-height: 14px; letter-spacing: -2px;"></div>
 </html>
